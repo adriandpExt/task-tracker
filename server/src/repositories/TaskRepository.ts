@@ -76,4 +76,18 @@ export const TaskRepository: ITaskRepository = {
       });
     });
   },
+
+  async remove(id: string) {
+    return new Promise<Tasks | void>((resolve, reject) => {
+      const delSQL = "DELETE FROM tasks_tbl WHERE id = ?;";
+
+      connection.query(delSQL, [id], (err) => {
+        if (err) {
+          reject(new Error(`Failed to delete the task with id: ${id}`));
+        } else {
+          resolve();
+        }
+      });
+    });
+  },
 };

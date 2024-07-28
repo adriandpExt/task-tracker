@@ -1,4 +1,4 @@
-import { CreateTask, UpdateTask } from "../entities/Task";
+import { CreateTask, Tasks, UpdateTask } from "../entities/Task";
 import { ITaskInteractor } from "../interfaces/task/ITaskInteractor";
 import { ITaskRepository } from "../interfaces/task/ITaskRepository";
 
@@ -31,13 +31,25 @@ export const TaskInteractor = (
 
     return await repository.update(id, task, userId);
   };
+
   const all = async () => {
     return await repository.all();
+  };
+
+  const remove = async (id: string) => {
+    if (!id) {
+      throw { statusCode: 404, message: `Task with ID: ${id} not found!` };
+    }
+
+    LogMessage(`The taskId:${id}  is remove`);
+
+    return await repository.remove(id);
   };
 
   return {
     create,
     update,
     all,
+    remove,
   };
 };

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { UpdateTask, CreateTask } from "../entities/Task";
+import { UpdateTask, CreateTask, Tasks } from "../entities/Task";
 import { ITaskInteractor } from "../interfaces/task/ITaskInteractor";
 
 export const TaskController = (interactor: ITaskInteractor) => {
@@ -78,9 +78,29 @@ export const TaskController = (interactor: ITaskInteractor) => {
     }
   };
 
+  const onRemoveTask = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const id = req.params.id;
+
+      const data = interactor.remove(id);
+
+      res.status(200).json({
+        data,
+        message: `Successfully remove task with id: ${id}`,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   return {
     onGetTodos,
     onUpdateTodo,
     onCreateTodo,
+    onRemoveTask,
   };
 };

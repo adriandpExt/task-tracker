@@ -13,5 +13,6 @@ const router = express.Router();
 router.get("/tasks", controller.onGetTodos);
 router.post("/tasks", controller.onCreateTodo);
 router.put("/tasks/:id", controller.onUpdateTodo);
+router.delete("/tasks/:id", controller.onRemoveTask);
 
 export default router;
