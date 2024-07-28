@@ -1,7 +1,5 @@
 /* eslint-disable react/prop-types */
 
-import { useAuth } from "~/hooks/useAuth";
-
 import useViewTask from "~/store/useViewTask";
 
 import { SvgIcons } from "../../svg-icons";
@@ -9,13 +7,17 @@ import { SvgIcons } from "../../svg-icons";
 import Avatar from "./Avatar";
 
 import { detailsList } from "../utils";
+import { useNavigate } from "react-router-dom";
 
 export const Drawer = ({ isDrawerOpen, setIsDrawerOpen }) => {
-  const { logoutAuth, email } = useAuth();
+  const navigate = useNavigate();
+  const email = localStorage.getItem("email");
+
   const { setFilter } = useViewTask();
 
   const handleLogout = () => {
-    logoutAuth();
+    localStorage.clear();
+    navigate("/", { replace: true });
   };
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);

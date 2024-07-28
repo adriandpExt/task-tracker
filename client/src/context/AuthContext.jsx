@@ -1,53 +1,26 @@
-/* eslint-disable react/prop-types */
-
-import { createContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { createContext, useState } from "react";
 
 export const AuthContext = createContext();
 
+// eslint-disable-next-line react/prop-types
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [token, setToken] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    !!localStorage.getItem("token")
+  );
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      setIsAuthenticated(true);
-      setToken(storedToken);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/dashboard");
-    }
-  }, [isAuthenticated, navigate]);
-
-  const handleLogin = (token, email) => {
+  const login = (token) => {
     localStorage.setItem("token", token);
-    localStorage.setItem("email", email);
-    setToken(null);
-
     setIsAuthenticated(true);
-    navigate("/dashboard");
   };
 
-  const handleLogout = () => {
+  const logout = () => {
     localStorage.clear();
     setIsAuthenticated(false);
-    setToken(null);
-    navigate("/");
   };
 
-  const value = {
-    token,
-    isAuthenticated,
-    loginAuth: handleLogin,
-    logoutAuth: handleLogout,
-    email: localStorage.getItem("email"),
-  };
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };

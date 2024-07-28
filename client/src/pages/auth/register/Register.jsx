@@ -1,33 +1,23 @@
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
-import * as Yup from "yup";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { Textfield } from "~/components";
+import { useRegister } from "~/queries/auth";
+
+import { validationSchema } from "./utils";
 
 const Register = () => {
-  const validationSchema = Yup.object().shape({
-    fullname: Yup.string().required("Fullname is required"),
-    email: Yup.string()
-      .email("Invalid email format")
-      .required("Email is required"),
-    password: Yup.string()
-      .min(6, "Password must be at least 6 characters")
-      .required("Password is required"),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password"), null], "Passwords must match")
-      .required("Confirm Password is required"),
-  });
-
-  const handleSubmitRegister = async (values, { setSubmitting }) => {
+  const register = useRegister();
+  const handleSubmitRegister = async (values) => {
     try {
-      console.log(values);
-      toast.success("Registration successful!");
+      const response = await register.mutateAsync(values);
+
+      if (response) toast.success("Registration successful!");
     } catch (error) {
       toast.error(`Error: ${error.message}`);
-    } finally {
-      setSubmitting(false);
     }
   };
 

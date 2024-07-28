@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import { SvgIcons } from "../svg-icons";
 
-import { Filter, UserDropdown, Drawer } from "./component";
+import { UserDropdown, Drawer } from "./component";
 
 export const Navbar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -22,7 +22,7 @@ export const Navbar = () => {
         </div>
 
         <div className="hidden lg:flex items-center justify-evenly">
-          <Filter />
+          {/* <Filter /> */}
           <UserDropdown />
         </div>
 

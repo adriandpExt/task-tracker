@@ -1,31 +1,32 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
+
 import { Textfield } from "~/components";
-import { useLogin } from "~/queries/login";
-import { useAuth } from "~/hooks/useAuth";
+import { useLogin } from "~/queries/auth";
+
 import { validationSchema } from "./utils";
 
 const Login = () => {
-  const { loginAuth } = useAuth();
+  const navigate = useNavigate();
   const loginMutation = useLogin();
 
-  const handleSubmitLogin = async (values, { setSubmitting }) => {
+  const handleSubmitLogin = async (values) => {
     try {
       const response = await loginMutation.mutateAsync(values);
 
       if (response && response.token) {
-        const { token, email } = response;
-        loginAuth(token, email);
+        navigate("/dashboard");
+        localStorage.setItem("email", values.email);
+        localStorage.setItem("token", response.token);
+
         toast.success("Login successful!");
       } else {
         toast.error("Incorrect email or password");
       }
     } catch (error) {
       toast.error(`Error: ${error.message}`);
-    } finally {
-      setSubmitting(false);
     }
   };
 

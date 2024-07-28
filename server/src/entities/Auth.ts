@@ -6,7 +6,7 @@ export interface Auth {
 
 export interface Register extends Auth {
   fullname: string;
-  roleId: number;
+  roleId?: number;
 }
 
 export interface LoginResponse {

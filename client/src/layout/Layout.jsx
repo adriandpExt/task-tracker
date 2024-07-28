@@ -1,10 +1,9 @@
 /* eslint-disable react/prop-types */
+import BreadCrumbs from "../components/navbar/component/BreadCrumbs";
 import Navbar from "../components/navbar/Navbar";
 
-import { useAuth } from "~/hooks/useAuth";
-
 const Layout = ({ children }) => {
-  const { email } = useAuth();
+  const email = localStorage.getItem("email");
 
   const renderuser = () => {
     return (
@@ -19,6 +18,7 @@ const Layout = ({ children }) => {
 
       <main className=" h-full w-full p-10 space-y-5 bg-gray-100">
         {renderuser()}
+        <BreadCrumbs />
         {children}
       </main>
     </>

@@ -22,12 +22,12 @@ export const AuthRepository: IAuthRepository = {
 
   register(user: Register) {
     return new Promise<Register>((resolve, reject) => {
-      const { fullname, email, password, roleId } = user;
+      const { fullname, email, password } = user;
 
       const postSQL = `INSERT INTO users_tbl (fullname, email, password, roleId) VALUES (?, ?, ?, ?)`;
       connection.query(
         postSQL,
-        [fullname, email, password, roleId],
+        [fullname, email, password, 3],
         (err, _results) => {
           if (err) {
             reject(new Error(`Failed to register ${err.message}`));
@@ -36,7 +36,6 @@ export const AuthRepository: IAuthRepository = {
               fullname: fullname,
               email: email,
               password: password,
-              roleId: roleId,
             };
             resolve(newAccount);
           }

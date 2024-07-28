@@ -1,45 +1,36 @@
-/* eslint-disable react/prop-types */
-import { Routes, Route, Navigate } from "react-router-dom";
-
+import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 import NotFound from "./pages/not-found/NotFound";
 import { privateRoutes, publicRoutes } from "./routes/routeConfig";
-import { useAuth } from "./hooks/useAuth";
-import { AuthProvider } from "./context/AuthContext";
 import Layout from "./layout/Layout";
+import { useAuth } from "./hooks/useAuth";
 
-const ProtectedRoute = ({ element }) => {
+const ProtectedRoute = () => {
   const { isAuthenticated } = useAuth();
 
-  if (!isAuthenticated) {
-    return <Navigate to="/" replace />;
-  }
-
-  return element;
+  return isAuthenticated ? (
+    <Layout>
+      <Outlet />
+    </Layout>
+  ) : (
+    <Navigate to="/" />
+  );
 };
 
 const App = () => {
   return (
-    <AuthProvider>
-      <Routes>
-        {publicRoutes.map((route) => (
-          <Route key={route.path} path={route.path} element={route.element} />
-        ))}
+    <Routes>
+      {publicRoutes.map((route) => (
+        <Route key={route.path} path={route.path} element={route.element} />
+      ))}
 
+      <Route element={<ProtectedRoute />}>
         {privateRoutes.map((route) => (
-          <Route
-            key={route.path}
-            path={route.path}
-            element={
-              <Layout>
-                <ProtectedRoute element={route.element} />
-              </Layout>
-            }
-          />
+          <Route key={route.path} element={route.element} path={route.path} />
         ))}
+      </Route>
 
-        <Route path={"*"} element={<NotFound />} />
-      </Routes>
-    </AuthProvider>
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 };
 

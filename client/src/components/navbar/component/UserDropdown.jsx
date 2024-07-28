@@ -1,13 +1,15 @@
 import Avatar from "./Avatar";
 import { SvgIcons } from "../../svg-icons";
-
-import { useAuth } from "~/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 export const UserDropdown = () => {
-  const { logoutAuth, email } = useAuth();
+  const navigate = useNavigate();
+
+  const email = localStorage.getItem("email");
 
   const handleLogout = () => {
-    logoutAuth();
+    localStorage.clear();
+    navigate("/");
   };
 
   return (

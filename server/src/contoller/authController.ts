@@ -21,13 +21,12 @@ export const AuthController = (interactor: IAuthInteractor) => {
     next: NextFunction
   ) => {
     try {
-      const { fullname, email, password, roleId } = req.body as Register;
+      const { fullname, email, password } = req.body as Register;
 
       const user: Register = {
         fullname,
         email,
         password,
-        roleId,
       };
 
       const data = await interactor.register(user);
