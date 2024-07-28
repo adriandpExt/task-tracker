@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { UpdateTask, CreateTask, Tasks } from "../entities/Task";
+import { UpdateTask, CreateTask } from "../entities/Task";
 import { ITaskInteractor } from "../interfaces/task/ITaskInteractor";
 
 export const TaskController = (interactor: ITaskInteractor) => {
@@ -11,7 +11,7 @@ export const TaskController = (interactor: ITaskInteractor) => {
     try {
       const data = await interactor.all();
 
-      res.status(200).json(data);
+      res.status(200).json({ data, message: `${data.length} item/s` });
     } catch (error) {
       next(error);
     }
@@ -60,7 +60,7 @@ export const TaskController = (interactor: ITaskInteractor) => {
       const userId = req.user?.id as string;
       const { title, description, statusId, assignTo } = req.body as CreateTask;
 
-      const taskDetail = {
+      const taskDetail: CreateTask = {
         title,
         description,
         statusId,

@@ -1,4 +1,4 @@
-import { QueryError, RowDataPacket } from "mysql2";
+import { QueryError, QueryResult, RowDataPacket } from "mysql2";
 import connection from "../db/connection";
 
 import {
@@ -42,17 +42,21 @@ export const TaskAssignmentRepository: ITaskAssignmentRepository = {
     return new Promise<TaskAssignment>((resolve, reject) => {
       const postSQL = `INSERT INTO task_assignment_tbl (taskId, assignTo, assignBy) VALUES (?, ?, ?)`;
 
-      connection.query(postSQL, [taskId, assignTo, userId], (err, _results) => {
-        if (err) {
-          reject(new Error(`Failed to create task: ${err.message}`));
-        } else {
-          const newAssign: TaskAssignment = {
-            ...task,
-            assignBy: userId,
-          };
-          resolve(newAssign);
+      connection.query(
+        postSQL,
+        [taskId, assignTo, userId],
+        (err: Error | null, _results: QueryResult) => {
+          if (err) {
+            reject(new Error(`Failed to create task: ${err.message}`));
+          } else {
+            const newAssign: TaskAssignment = {
+              ...task,
+              assignBy: userId,
+            };
+            resolve(newAssign);
+          }
         }
-      });
+      );
     });
   },
 };
