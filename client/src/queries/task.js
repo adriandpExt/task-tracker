@@ -1,5 +1,11 @@
 import { useMutation, useQuery } from "react-query";
-import { getAllTask, postTask, putTask, deleteTask } from "../api/task";
+import {
+  getAllTask,
+  postTask,
+  putTask,
+  deleteTask,
+  getTaskByStatus,
+} from "../api/task";
 
 export const useGetAllTask = () => {
   return useQuery({
@@ -18,4 +24,11 @@ export const usePutTask = () => {
 
 export const useDeleteTask = () => {
   return useMutation(deleteTask);
+};
+
+export const useGetTaskByStatus = () => {
+  return useQuery({
+    queryKey: ["getTaskByStatus"],
+    queryFn: getTaskByStatus,
+  });
 };

@@ -35,3 +35,11 @@ export const deleteTask = async (params) => {
 
   return response.data;
 };
+
+export const getTaskByStatus = async (statusId) => {
+  const response = await axios.get(
+    `${baseurl}/tasks/status?statusId=${statusId}`
+  );
+
+  return response.data;
+};

@@ -46,10 +46,22 @@ export const TaskInteractor = (
     return await repository.remove(id);
   };
 
+  const getTaskByStatus = async (statusId: number) => {
+    if (!statusId) {
+      throw {
+        statusCode: 404,
+        message: `Task with ID: ${statusId} not found!`,
+      };
+    }
+
+    return await repository.getTaskByStatus(statusId);
+  };
+
   return {
     create,
     update,
     all,
     remove,
+    getTaskByStatus,
   };
 };

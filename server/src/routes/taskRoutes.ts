@@ -11,8 +11,12 @@ const controller = TaskController(interactor);
 const router = express.Router();
 
 router.get("/tasks", controller.onGetTodos);
+router.get("/tasks/status", controller.onGetTaskByStatus);
+
 router.post("/tasks", controller.onCreateTodo);
+
 router.put("/tasks/:id", controller.onUpdateTodo);
+
 router.delete("/tasks/:id", controller.onRemoveTask);
 
 export default router;
