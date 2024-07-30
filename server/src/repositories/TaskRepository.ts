@@ -2,6 +2,7 @@ import moment from "moment";
 import connection from "../db/connection";
 import { CreateTask, Tasks, UpdateTask } from "../entities/Task";
 import { ITaskRepository } from "../interfaces/task/ITaskRepository";
+import { QueryError, QueryResult } from "mysql2";
 
 export const TaskRepository: ITaskRepository = {
   async create(userId: string, task: CreateTask) {
@@ -79,15 +80,34 @@ export const TaskRepository: ITaskRepository = {
 
   async remove(id: string) {
     return new Promise<Tasks | void>((resolve, reject) => {
-      const delSQL = "DELETE FROM tasks_tbl WHERE id = ?;";
+      const delSQL = "DELETE FROM tasks_tbl WHERE id = ?";
 
-      connection.query(delSQL, [id], (err) => {
+      connection.query(delSQL, [id], (err: QueryError | null) => {
         if (err) {
           reject(new Error(`Failed to delete the task with id: ${id}`));
         } else {
           resolve();
         }
       });
+    });
+  },
+
+  async getTaskByStatus(statusId: number) {
+    return new Promise<Tasks[] | void>((resolve, reject) => {
+      const selectByStatus = "SELECT * FROM tasks_tbl WHERE statusId = ?";
+      console.log(`Executing query: ${selectByStatus} with statusId: ${statusId}`);
+
+      connection.query(
+        selectByStatus,
+        [statusId],
+        (err: QueryError | null, results: QueryResult) => {
+          if (err) {
+            reject(new Error(`Failed to get tasks by status: ${err.message}`));
+          } else {
+            resolve(results as Tasks[]);
+          }
+        }
+      );
     });
   },
 };

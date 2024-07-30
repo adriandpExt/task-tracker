@@ -97,10 +97,35 @@ export const TaskController = (interactor: ITaskInteractor) => {
     }
   };
 
+  const onGetTaskByStatus = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const statusId = parseInt(req.query.statusId as string, 10);
+
+      if (isNaN(statusId)) {
+        return res.status(400).json({ message: "Invalid statusId" });
+      }
+
+      if (statusId >= 5) {
+        return res.status(404).json({ message: "Invalid statusId" });
+      }
+
+      const data = await interactor.getTaskByStatus(statusId);
+
+      res.status(200).json(data);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   return {
     onGetTodos,
     onUpdateTodo,
     onCreateTodo,
     onRemoveTask,
+    onGetTaskByStatus,
   };
 };

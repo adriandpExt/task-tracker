@@ -3,12 +3,14 @@ import { useState } from "react";
 
 const getColor = (title) => {
   switch (title) {
-    case "Not Started":
+    case "Open":
       return "bg-red-400";
     case "In Progress":
       return "bg-yellow-500";
-    case "Completed":
+    case "Done":
       return "bg-green-500";
+    case "Backlogs":
+      return "bg-violet-500";
     default:
       return "bg-base-200";
   }
@@ -40,14 +42,12 @@ export const Accordion = ({ title, children }) => {
         {title}
       </div>
       <div
-        className={`collapse-content overflow-y-auto transition-all duration-300 ease-out p-4 ${
+        className={`collapse-content overflow-y-auto transition-all duration-300 ease-out px-4 py-5 ${
           isOpen ? "max-h-96" : "max-h-0"
         }`}
       >
         {children ? (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {children}
-          </div>
+          <div className="space-y-4">{children}</div>
         ) : (
           "No Task Available"
         )}
